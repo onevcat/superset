@@ -18,19 +18,16 @@ export default function Home() {
                 {/* Hero Content */}
                 <div className="relative z-10 px-8 text-center text-white flex flex-col items-center justify-center gap-4">
                     <FadeUp>
-                        <div className="flex flex-col items-center gap-32">
-                            <h1 className="text-[20rem] leading-none">⊇</h1>
-                            <h1 className="text-[14rem] font-bold leading-none -mt-16">Superset</h1>
-                        </div>
+                        <h1 className="text-[14rem] font-bold leading-none -mt-16">Superset</h1>
                     </FadeUp>
                     <FadeUp delay={0.2}>
                         <h2 className="text-2xl font-thin">The last app you'll ever need</h2>
                     </FadeUp>
                 </div>
-            </HeroParallax>
+            </HeroParallax >
 
             {/* Feature Cards Section */}
-            <section className="py-24 px-8 bg-black">
+            < section className="py-24 px-8 bg-black" >
                 <div className="max-w-7xl mx-auto">
                     <FadeUp>
                         <h2 className="text-4xl font-bold text-center mb-16 text-white">
@@ -81,10 +78,10 @@ export default function Home() {
                         </FadeUp>
                     </div>
                 </div>
-            </section>
+            </section >
 
             {/* Additional Content Section */}
-            <section className="py-24 px-8 bg-black">
+            < section className="py-24 px-8 bg-black" >
                 <div className="max-w-4xl mx-auto">
                     <FadeUp>
                         <Card className="p-12 bg-zinc-900 border-zinc-800">
@@ -101,7 +98,7 @@ export default function Home() {
                         </Card>
                     </FadeUp>
                 </div>
-            </section>
-        </main>
+            </section >
+        </main >
     );
 }

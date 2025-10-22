@@ -1,5 +1,6 @@
 "use client";
 
+import { Center, Text } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import type { Mesh, PointLight } from "three";
@@ -52,13 +53,36 @@ function LitBackground() {
         <>
             {/* Background plane that fills the viewport and faces camera */}
             <mesh ref={meshRef} position={[0, 0, 0]}>
-                <planeGeometry args={[viewport.width * 1.5, viewport.height * 1.5, 50, 50]} />
+                <planeGeometry
+                    args={[viewport.width * 1.5, viewport.height * 1.5, 50, 50]}
+                />
                 <meshStandardMaterial color="#1a1a1a" roughness={0.8} metalness={0.2} />
             </mesh>
+
+            {/* 3D Text that reacts to light */}
+            <group position={[0, 0, 1]}>
+                {/* Create depth by layering multiple text instances */}
+                {[...Array(10)].map((_, i) => (
+                    <Text
+                        key={i.toString()}
+                        position={[0, 0, -i * 0.05]}
+                        fontSize={3}
+                        color={i === 0 ? "#ffffff" : "#cccccc"}
+                        anchorX="center"
+                        anchorY="middle"
+                    >
+                        ⊇
+                    </Text>
+                ))}
+            </group>
+
+            {/* Ambient light for base visibility */}
+            <ambientLight intensity={0.3} />
+
             {/* Point light that follows mouse */}
             <pointLight
                 ref={lightRef}
-                intensity={5}
+                intensity={8}
                 color="#ff9999"
                 distance={100}
                 decay={0.3}
