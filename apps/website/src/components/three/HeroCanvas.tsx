@@ -1,38 +1,66 @@
 "use client";
 
-import { OrbitControls, Sphere } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
-import type { PointLight } from "three";
+import type { Mesh, PointLight } from "three";
+import * as THREE from "three";
 
-function AnimatedSphere() {
-	return (
-		<Sphere args={[1, 32, 32]} position={[0, 0, 0]}>
-			<meshStandardMaterial
-				color="#1a1a1a"
-				roughness={0.1}
-				metalness={1}
-				wireframe={false}
-			/>
-		</Sphere>
-	);
-}
-
-function MouseLight() {
+function LitBackground() {
+	const meshRef = useRef<Mesh>(null);
 	const lightRef = useRef<PointLight>(null);
+	const { viewport, camera } = useThree();
 
 	useFrame((state) => {
 		if (lightRef.current) {
-			// Get mouse position from state (normalized -1 to 1)
-			const x = state.mouse.x * 5;
-			const y = state.mouse.y * 5;
-			// Position light behind the sphere (negative Z)
-			lightRef.current.position.set(x, y, -3);
+			// Convert normalized mouse coords to viewport coordinates
+			const x = (state.mouse.x * viewport.width) / 2;
+			const y = (state.mouse.y * viewport.height) / 2;
+			// Position light slightly in front of the plane
+			lightRef.current.position.set(x, y, 2);
+		}
+
+		// Make the plane always face the camera
+		if (meshRef.current) {
+			meshRef.current.lookAt(camera.position);
+
+			// Animate the wavy displacement
+			const geometry = meshRef.current.geometry;
+			const positionAttribute = geometry.attributes.position;
+			const time = state.clock.elapsedTime;
+
+			for (let i = 0; i < positionAttribute.count; i++) {
+				const x = positionAttribute.getX(i);
+				const y = positionAttribute.getY(i);
+
+				// Create wave effect using sine waves
+				const wave1 = Math.sin(x * 0.5 + time * 0.5) * 0.1;
+				const wave2 = Math.sin(y * 0.5 + time * 0.3) * 0.1;
+				const z = wave1 + wave2;
+
+				positionAttribute.setZ(i, z);
+			}
+
+			positionAttribute.needsUpdate = true;
+			geometry.computeVertexNormals();
 		}
 	});
 
 	return (
-		<pointLight ref={lightRef} intensity={2} color="#ffffff" distance={10} />
+		<>
+			{/* Background plane that fills the viewport and faces camera */}
+			<mesh ref={meshRef} position={[0, 0, 0]}>
+				<planeGeometry args={[viewport.width * 1.5, viewport.height * 1.5, 50, 50]} />
+				<meshStandardMaterial color="#1a1a1a" roughness={0.8} metalness={0.2} />
+			</mesh>
+			{/* Point light that follows mouse */}
+			<pointLight
+				ref={lightRef}
+				intensity={20}
+				color="#ffffff"
+				distance={6}
+				decay={1.5}
+			/>
+		</>
 	);
 }
 
@@ -42,22 +70,13 @@ interface HeroCanvasProps {
 
 export function HeroCanvas({ className }: HeroCanvasProps) {
 	return (
-		<div className={className}>
+		<div className={className} style={{ pointerEvents: "auto" }}>
 			<Canvas
 				camera={{ position: [0, 0, 5], fov: 45 }}
-				style={{ background: "#000000" }}
+				style={{ background: "#0a0a0a" }}
 			>
 				<Suspense fallback={null}>
-					<ambientLight intensity={0.2} />
-					<MouseLight />
-					<pointLight position={[3, 3, 3]} intensity={0.5} />
-					<AnimatedSphere />
-					<OrbitControls
-						enableZoom={false}
-						enablePan={false}
-						autoRotate
-						autoRotateSpeed={1}
-					/>
+					<LitBackground />
 				</Suspense>
 			</Canvas>
 		</div>
