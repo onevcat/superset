@@ -1,26 +1,26 @@
 {
-  "name": "@superset/website",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@superset/ui": "workspace:*",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "next": "^15.1.6"
-  },
-  "devDependencies": {
-    "@superset/typescript": "workspace:*",
-    "typescript": "^5.7.3",
-    "@types/node": "^22.10.5",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
-  }
+	"name": "@superset/website",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@superset/ui": "workspace:*",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"next": "^15.1.6"
+	},
+	"devDependencies": {
+		"@superset/typescript": "workspace:*",
+		"typescript": "^5.7.3",
+		"@types/node": "^22.10.5",
+		"@types/react": "^18.3.18",
+		"@types/react-dom": "^18.3.5",
+		"@tailwindcss/postcss": "^4",
+		"tailwindcss": "^4"
+	}
 }
