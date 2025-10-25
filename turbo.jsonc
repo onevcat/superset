@@ -4,7 +4,7 @@
 		"build": {
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"dependsOn": ["^build"],
-			"outputs": [".next/**", "!.next/cache/**", "dist/**"]
+			"outputs": [".next/**", "!.next/cache/**", "dist/**", "dist-electron/**", "release/**"]
 		},
 		"dev": {
 			"cache": false,

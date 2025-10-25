@@ -7,6 +7,9 @@ Guidelines for agents and developers working in this repository.
 Bun + Turbo monorepo with:
 - **Apps**:
   - `apps/website` - Main website application
+  - `apps/desktop` - Electron desktop application
+  - `apps/docs` - Documentation site
+  - `apps/blog` - Blog site
 - **Packages**:
   - `packages/ui` - Shared UI components (shadcn/ui + TailwindCSS v4)
   - `packages/db` - Drizzle ORM database schema
