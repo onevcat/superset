@@ -5,6 +5,11 @@ import {
     Menu,
     Plus,
     Terminal,
+    Home,
+    Layers,
+    FileText,
+    Circle,
+    Settings,
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
@@ -30,11 +35,15 @@ interface SidebarProps {
     onCollapse: () => void;
 }
 
+type SidebarPanel = "tabs" | "layers" | "files" | "sessions" | "settings";
+
 export function Sidebar({
     onTabSelect,
     activeTabId,
     onCollapse,
 }: SidebarProps) {
+    const [activePanel, setActivePanel] = useState<SidebarPanel>("tabs");
+
     // Stub tab groups data
     const [tabGroups, setTabGroups] = useState<TabGroup[]>([
         {
@@ -111,28 +120,11 @@ export function Sidebar({
         }
     };
 
-    return (
-        <div className="flex flex-col h-full w-64 select-none bg-neutral-900 text-neutral-300 border-r border-neutral-800">
-            {/* Top Section - Matches window controls height */}
-            <div
-                className="flex items-center border-b border-neutral-800"
-                style={
-                    {
-                        height: "48px",
-                        paddingLeft: "88px",
-                        WebkitAppRegion: "drag",
-                    } as React.CSSProperties
-                }
-            >
-                <div style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
-                    <Button variant="ghost" size="icon-sm" onClick={onCollapse}>
-                        <Menu size={16} />
-                    </Button>
-                </div>
-            </div>
-
-            {/* Tabs Section */}
-            <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+    const renderPanelContent = () => {
+        switch (activePanel) {
+            case "tabs":
+                return (
+                    <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
                 {/* New Tab Button */}
                 <Button
                     variant="ghost"
@@ -188,6 +180,118 @@ export function Sidebar({
                         )}
                     </div>
                 ))}
+            </div>
+                );
+            case "layers":
+                return (
+                    <div className="flex-1 overflow-y-auto px-3 py-2">
+                        <div className="text-sm text-neutral-500 text-center py-8">
+                            Layers panel coming soon...
+                        </div>
+                    </div>
+                );
+            case "files":
+                return (
+                    <div className="flex-1 overflow-y-auto px-3 py-2">
+                        <div className="text-sm text-neutral-500 text-center py-8">
+                            Files panel coming soon...
+                        </div>
+                    </div>
+                );
+            case "sessions":
+                return (
+                    <div className="flex-1 overflow-y-auto px-3 py-2">
+                        <div className="text-sm text-neutral-500 text-center py-8">
+                            Sessions panel coming soon...
+                        </div>
+                    </div>
+                );
+            case "settings":
+                return (
+                    <div className="flex-1 overflow-y-auto px-3 py-2">
+                        <div className="text-sm text-neutral-500 text-center py-8">
+                            Settings panel coming soon...
+                        </div>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className="flex flex-col h-full w-64 select-none bg-neutral-900 text-neutral-300 border-r border-neutral-800">
+            {/* Top Section - Matches window controls height */}
+            <div
+                className="flex items-center border-b border-neutral-800"
+                style={
+                    {
+                        height: "48px",
+                        paddingLeft: "88px",
+                        WebkitAppRegion: "drag",
+                    } as React.CSSProperties
+                }
+            >
+                <div style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+                    <Button variant="ghost" size="icon-sm" onClick={onCollapse}>
+                        <Menu size={16} />
+                    </Button>
+                </div>
+            </div>
+
+            {/* Panel Content */}
+            {renderPanelContent()}
+
+            {/* Bottom Tab Bar */}
+            <div className="border-t border-neutral-800 px-2 py-2">
+                <div className="flex items-center justify-between gap-1">
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setActivePanel("tabs")}
+                        className={activePanel === "tabs" ? "bg-neutral-800" : ""}
+                    >
+                        <Home size={18} />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setActivePanel("layers")}
+                        className={activePanel === "layers" ? "bg-neutral-800" : ""}
+                    >
+                        <Layers size={18} />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setActivePanel("files")}
+                        className={activePanel === "files" ? "bg-neutral-800" : ""}
+                    >
+                        <FileText size={18} />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setActivePanel("sessions")}
+                        className={activePanel === "sessions" ? "bg-neutral-800" : ""}
+                    >
+                        <Circle size={18} />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                        onClick={() => setActivePanel("settings")}
+                        className={activePanel === "settings" ? "bg-neutral-800" : ""}
+                    >
+                        <Settings size={18} />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon-sm"
+                    >
+                        <Plus size={18} />
+                    </Button>
+                </div>
             </div>
         </div>
     );
