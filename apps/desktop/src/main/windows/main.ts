@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron'
+import { BrowserWindow, screen } from 'electron'
 import { join } from 'node:path'
 
 import { createWindow } from 'lib/electron-app/factories/windows/create'
@@ -7,11 +7,13 @@ import { displayName } from '~/package.json'
 import { registerTerminalIPCs } from '../lib/terminal-ipcs'
 
 export async function MainWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
   const window = createWindow({
     id: 'main',
     title: displayName,
-    width: 1200,
-    height: 800,
+    width,
+    height,
     show: false,
     center: true,
     movable: true,
@@ -31,10 +33,6 @@ export async function MainWindow() {
   const cleanupTerminal = registerTerminalIPCs(window)
 
   window.webContents.on('did-finish-load', () => {
-    if (ENVIRONMENT.IS_DEV) {
-      window.webContents.openDevTools({ mode: 'detach' })
-    }
-
     window.show()
   })
 
