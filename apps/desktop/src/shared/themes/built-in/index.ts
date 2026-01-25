@@ -1,6 +1,7 @@
 import type { Theme } from "../types";
 import { darkTheme } from "./dark";
 import { emberTheme } from "./ember";
+import { kanagawaBonesTheme } from "./kanagawa-bones";
 import { lightTheme } from "./light";
 import { monokaiTheme } from "./monokai";
 import { oneDarkTheme } from "./one-dark";
@@ -12,6 +13,7 @@ export const builtInThemes: Theme[] = [
 	darkTheme,
 	lightTheme,
 	emberTheme,
+	kanagawaBonesTheme,
 	monokaiTheme,
 	oneDarkTheme,
 ];
@@ -29,4 +31,11 @@ export function getBuiltInTheme(id: string): Theme | undefined {
 }
 
 // Re-export individual themes
-export { darkTheme, emberTheme, lightTheme, monokaiTheme, oneDarkTheme };
+export {
+	darkTheme,
+	emberTheme,
+	kanagawaBonesTheme,
+	lightTheme,
+	monokaiTheme,
+	oneDarkTheme,
+};
