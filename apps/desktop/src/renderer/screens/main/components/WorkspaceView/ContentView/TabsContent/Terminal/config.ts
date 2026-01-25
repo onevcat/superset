@@ -14,6 +14,7 @@ export const DEBUG_TERMINAL =
 
 // Nerd Fonts first for shell theme compatibility (Oh My Posh, Powerlevel10k, etc.)
 const TERMINAL_FONT_FAMILY = [
+	"Maple Mono NF CN",
 	"MesloLGM Nerd Font",
 	"MesloLGM NF",
 	"MesloLGS NF",
@@ -33,7 +34,7 @@ const TERMINAL_FONT_FAMILY = [
 
 export const TERMINAL_OPTIONS: ITerminalOptions = {
 	cursorBlink: true,
-	fontSize: 14,
+	fontSize: 13,
 	fontFamily: TERMINAL_FONT_FAMILY,
 	theme: TERMINAL_THEME,
 	allowProposedApi: true,
