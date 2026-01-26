@@ -125,6 +125,11 @@ const config: Configuration = {
 				"Superset needs access to your local network to discover and connect to development servers running on your network.",
 			// Bonjour service types to browse for (triggers the permission prompt)
 			NSBonjourServices: ["_http._tcp", "_https._tcp"],
+			// Environment variables for the app process
+			// SKIP_ENV_VALIDATION allows running without external service credentials (for local builds)
+			LSEnvironment: {
+				SKIP_ENV_VALIDATION: "1",
+			},
 		},
 	},
 

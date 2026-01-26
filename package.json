@@ -21,6 +21,7 @@
 		"dev:cli": "turbo dev --filter=@superset/cli",
 		"dev:marketing": "turbo dev --filter=@superset/marketing --filter=@superset/docs",
 		"build": "turbo build --filter=@superset/desktop",
+		"build:standalone": "bun run --filter=@superset/desktop build:standalone",
 		"test": "turbo test",
 		"db:generate": "turbo db:generate",
 		"db:push": "cd packages/db && bun push",

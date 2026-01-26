@@ -41,10 +41,8 @@ export default defineConfig({
 
 		define: {
 			"process.env.NODE_ENV": defineEnv(process.env.NODE_ENV, "production"),
-			"process.env.SKIP_ENV_VALIDATION": defineEnv(
-				process.env.SKIP_ENV_VALIDATION,
-				"",
-			),
+			// SKIP_ENV_VALIDATION is intentionally NOT defined here so it reads from runtime process.env
+			// This allows running production builds without external services
 			"process.env.NEXT_PUBLIC_API_URL": defineEnv(
 				process.env.NEXT_PUBLIC_API_URL,
 				"https://api.superset.sh",
@@ -103,10 +101,7 @@ export default defineConfig({
 
 		define: {
 			"process.env.NODE_ENV": defineEnv(process.env.NODE_ENV, "production"),
-			"process.env.SKIP_ENV_VALIDATION": defineEnv(
-				process.env.SKIP_ENV_VALIDATION,
-				"",
-			),
+			// SKIP_ENV_VALIDATION is intentionally NOT defined here so it reads from runtime process.env
 			__APP_VERSION__: defineEnv(version),
 		},
 

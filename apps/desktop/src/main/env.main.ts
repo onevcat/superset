@@ -37,9 +37,9 @@ export const env = createEnv({
 		SENTRY_DSN_DESKTOP: process.env.SENTRY_DSN_DESKTOP,
 	},
 	emptyStringAsUndefined: true,
-	// Only allow skipping validation in development (never in production)
-	skipValidation:
-		process.env.NODE_ENV === "development" && !!process.env.SKIP_ENV_VALIDATION,
+	// Allow skipping validation when SKIP_ENV_VALIDATION is set (for local builds without external services)
+	// Note: SKIP_ENV_VALIDATION is intentionally NOT replaced by Vite's define, so it reads from runtime process.env
+	skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 
 	// Main process runs in trusted Node.js environment
 	isServer: true,

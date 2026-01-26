@@ -22,6 +22,8 @@
 		"copy:native-modules": "bun run scripts/copy-native-modules.ts",
 		"prebuild": "bun run clean:dev && bun run compile:app && bun run copy:native-modules",
 		"build": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --publish never",
+		"prebuild:standalone": "bun run clean:dev && cross-env SKIP_ENV_VALIDATION=1 bun run compile:app && bun run copy:native-modules",
+		"build:standalone": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --publish never",
 		"prepackage": "bun run copy:native-modules",
 		"package": "electron-builder --config electron-builder.ts",
 		"install:deps": "electron-builder install-app-deps",
