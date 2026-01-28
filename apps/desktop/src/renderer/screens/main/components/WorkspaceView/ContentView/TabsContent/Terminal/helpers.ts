@@ -18,6 +18,10 @@ import {
 	getTerminalColors,
 } from "shared/themes";
 import { RESIZE_DEBOUNCE_MS, TERMINAL_OPTIONS } from "./config";
+import {
+	HALFWIDTH_TO_FULLWIDTH_PUNCTUATION,
+	isImePunctuationPassthroughEnabled,
+} from "./imePunctuation";
 import { FilePathLinkProvider, UrlLinkProvider } from "./link-providers";
 import { suppressQueryResponses } from "./suppressQueryResponses";
 import { scrollToBottom } from "./utils";
@@ -302,6 +306,8 @@ export interface KeyboardHandlerOptions {
 	/** Callback for the configured clear terminal shortcut */
 	onClear?: () => void;
 	onWrite?: (data: string) => void;
+	/** Callback when IME punctuation passthrough is short-circuited on keydown */
+	onImePunctuationKeydown?: () => void;
 }
 
 export interface PasteHandlerOptions {
@@ -454,7 +460,46 @@ export function setupKeyboardHandler(
 	xterm: XTerm,
 	options: KeyboardHandlerOptions = {},
 ): () => void {
+	type XTermPrivateFlags = {
+		_keyDownSeen?: boolean;
+		_keyDownHandled?: boolean;
+		_keyPressHandled?: boolean;
+	};
+	const xtermFlags = xterm as unknown as XTermPrivateFlags;
+
 	const handler = (event: KeyboardEvent): boolean => {
+		// CRITICAL: Never interfere with IME composition
+		if (event.keyCode === 229 || event.isComposing) {
+			return true;
+		}
+
+		// Prefer the native `input` event for punctuation keys.
+		// We must handle BOTH keydown and keypress because xterm.js can still
+		// process keypress even when keydown was short-circuited.
+		if (
+			isImePunctuationPassthroughEnabled() &&
+			(event.type === "keydown" || event.type === "keypress") &&
+			!event.metaKey &&
+			!event.ctrlKey &&
+			!event.altKey &&
+			HALFWIDTH_TO_FULLWIDTH_PUNCTUATION[event.key]
+		) {
+			// xterm.js sets a private `_keyDownSeen` flag to true *before*
+			// calling the custom key handler. Its `input` event path will
+			// ignore composed input when this flag is true, which would make
+			// punctuation disappear entirely when we short-circuit here.
+			// Reset it so the subsequent `input` event can be handled.
+			if (event.type === "keydown") {
+				options.onImePunctuationKeydown?.();
+				xtermFlags._keyDownSeen = false;
+				xtermFlags._keyPressHandled = false;
+			}
+
+			// Do not write anything here. Let the browser/IME produce the actual
+			// character via the textarea's `input` event.
+			return false;
+		}
+
 		const isShiftEnter =
 			event.key === "Enter" &&
 			event.shiftKey &&

@@ -31,6 +31,7 @@ import {
 	setupResizeHandlers,
 	type TerminalRendererRef,
 } from "./helpers";
+import { setupImePunctuationPassthrough } from "./imePunctuation";
 import {
 	useFileLinkClick,
 	useTerminalColdRestore,
@@ -400,7 +401,11 @@ export const Terminal = ({ tabId, workspaceId }: TerminalProps) => {
 		};
 		restartTerminalRef.current = restartTerminal;
 
+		let imeController: ReturnType<typeof setupImePunctuationPassthrough> | null =
+			null;
+
 		const handleTerminalInput = (data: string) => {
+			imeController?.handleOnData(data);
 			if (isRestoredModeRef.current || connectionErrorRef.current) return;
 			if (isExitedRef.current) {
 				if (!isFocusedRef.current || wasKilledByUserRef.current) return;
@@ -563,10 +568,16 @@ export const Terminal = ({ tabId, workspaceId }: TerminalProps) => {
 			writeRef.current({ paneId, data });
 		};
 
+		imeController = setupImePunctuationPassthrough({
+			xterm,
+			onWrite: handleTerminalInput,
+		});
+
 		const cleanupKeyboard = setupKeyboardHandler(xterm, {
 			onShiftEnter: () => handleWrite("\x1b\r"),
 			onClear: handleClear,
 			onWrite: handleWrite,
+			onImePunctuationKeydown: imeController.onImePunctuationKeydown,
 		});
 		const cleanupClickToMove = setupClickToMoveCursor(xterm, {
 			onWrite: handleWrite,
@@ -627,6 +638,7 @@ export const Terminal = ({ tabId, workspaceId }: TerminalProps) => {
 			cleanupResize();
 			cleanupPaste();
 			cleanupQuerySuppression();
+			imeController?.cleanup();
 			unregisterClearCallbackRef.current(paneId);
 			unregisterScrollToBottomCallbackRef.current(paneId);
 			debouncedSetTabAutoTitleRef.current?.cancel?.();
