@@ -1,9 +1,21 @@
 import { ELECTRIC_PROTOCOL_QUERY_PARAMS } from "@electric-sql/client";
-import { auth } from "@superset/auth/server";
-import { env } from "@/env";
-import { buildWhereClause } from "./utils";
+const ELECTRIC_ENABLED = process.env.SUPERSET_ENABLE_ELECTRIC === "1";
+const ELECTRIC_DISABLED =
+	process.env.SUPERSET_DISABLE_ELECTRIC === "1" ||
+	process.env.ELECTRIC_DISABLED === "1" ||
+	!ELECTRIC_ENABLED;
 
 export async function GET(request: Request): Promise<Response> {
+	if (ELECTRIC_DISABLED) {
+		return new Response(null, { status: 204 });
+	}
+
+	const [{ auth }, { env }, { buildWhereClause }] = await Promise.all([
+		import("@superset/auth/server"),
+		import("@/env"),
+		import("./utils"),
+	]);
+
 	const sessionData = await auth.api.getSession({
 		headers: request.headers,
 	});
