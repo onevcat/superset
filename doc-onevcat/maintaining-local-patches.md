@@ -4,10 +4,12 @@ This document describes the strategy for maintaining local customizations while 
 
 ## Our Local Changes
 
-### 1. CJK IME Punctuation Workaround (Feature)
-- **Files:** `Terminal.tsx`, `helpers.ts`
-- **Conflict risk:** Medium - modifies `setupKeyboardHandler` function
-- **Strategy:** Changes are additive (new functions, new code blocks)
+### 1. IME Punctuation Passthrough (Feature)
+- **Files:** `Terminal.tsx`, `helpers.ts`, `imePunctuation.ts`
+- **Conflict risk:** Medium - modifies `setupKeyboardHandler` and adds small wiring
+- **Strategy:** Keep the handler blocks minimal and push behavior into `imePunctuation.ts`
+- **Flag:** `SUPERSET_TERMINAL_IME_PUNCT` (default ON, set to `"0"` to disable)
+- **Guard:** Fallback is disabled during active composition sessions (e.g. Japanese IME)
 
 ### 2. Personal Preferences (Config)
 - **Files:** `config.ts`, `env.ts`
@@ -60,9 +62,13 @@ git rebase --continue
 
 3. **Use markers for easy identification:**
    ```typescript
-   // [LOCAL] CJK IME workaround - start
-   if (isIMELikelyActive()) { ... }
-   // [LOCAL] CJK IME workaround - end
+   // [LOCAL] IME punctuation passthrough - start
+   if (event.keyCode === 229 || event.isComposing) return true;
+   if (isImePunctuationPassthroughEnabled() && ...) {
+     xtermFlags._keyDownSeen = false;
+     return false;
+   }
+   // [LOCAL] IME punctuation passthrough - end
    ```
 
 4. **Extract config to separate files:**
@@ -99,7 +105,7 @@ git stash pop
 
 | Change | Files | Risk | Notes |
 |--------|-------|------|-------|
-| IME Workaround | helpers.ts, Terminal.tsx | Medium | Core functionality |
+| IME punctuation passthrough | helpers.ts, Terminal.tsx, imePunctuation.ts | Medium | Core functionality |
 | Font/Size | config.ts | Low | Simple values |
 | ZSH env | env.ts | Low | Additive |
 | Theme | index.ts, kanagawa-bones.ts | Low | Additive |
