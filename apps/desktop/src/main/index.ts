@@ -251,7 +251,7 @@ if (!gotTheLock) {
 		}
 
 		await makeAppSetup(() => MainWindow());
-		setupAutoUpdater();
+		// setupAutoUpdater();
 
 		// Initialize system tray (macOS menu bar icon for daemon management)
 		initTray();
