@@ -33,6 +33,7 @@ Recent local adjustments (from @onevcat commits):
 - Disabled some network-dependent features.
 - Removed login requirements for local use.
 - Disabled the auto-updater locally.
+- Disabled GitHub Actions triggers in this branch.
 - Fixed CJK IME edge cases in terminal input handling.
 - Added a standalone desktop build path for running without external services.
 - Disabled Electric by default in the API for local usage.

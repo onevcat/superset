@@ -1,8 +1,6 @@
 name: Cleanup Preview
 
-on:
-  pull_request:
-    types: [closed]
+on: []
 
 jobs:
   cleanup:

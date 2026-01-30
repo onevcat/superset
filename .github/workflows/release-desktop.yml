@@ -1,15 +1,6 @@
 name: Release Desktop App
 
-on:
-  push:
-    tags:
-      - "desktop-v*.*.*"
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "Version to release (e.g., 1.0.0)"
-        required: false
-        type: string
+on: []
 
 permissions:
   contents: write

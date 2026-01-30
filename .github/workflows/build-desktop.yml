@@ -1,32 +1,6 @@
 name: Build Desktop App
 
-on:
-  workflow_call:
-    inputs:
-      channel:
-        description: "Release channel (stable or canary)"
-        required: true
-        type: string
-      version_suffix:
-        description: "Version suffix to append (e.g., -canary). Empty for stable."
-        required: false
-        type: string
-        default: ""
-      electron_builder_config:
-        description: "Electron builder config file"
-        required: false
-        type: string
-        default: "electron-builder.ts"
-      artifact_prefix:
-        description: "Prefix for artifact names"
-        required: false
-        type: string
-        default: "desktop"
-      artifact_retention_days:
-        description: "Number of days to retain artifacts"
-        required: false
-        type: number
-        default: 30
+on: []
 
 jobs:
   build:
