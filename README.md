@@ -19,6 +19,24 @@
 
 </div>
 
+## ONEVCAT Local Development Notes
+
+This repository is currently used as a personal fork/branch by @onevcat.
+Most changes requested in this branch target local workflows rather than
+general upstream behavior.
+
+Local branch traits:
+- Upstream source is `upstream/main`; personal changes live on `origin/main`.
+- Regularly rebased onto `upstream/main` to keep up with official changes.
+
+Recent local adjustments (from @onevcat commits):
+- Disabled some network-dependent features.
+- Removed login requirements for local use.
+- Disabled the auto-updater locally.
+- Fixed CJK IME edge cases in terminal input handling.
+- Added a standalone desktop build path for running without external services.
+- Disabled Electric by default in the API for local usage.
+
 ## Why Superset?
 
 Superset is a turbocharged terminal that allows you to run any CLI coding agents along with the tools to 10x your development workflow. 

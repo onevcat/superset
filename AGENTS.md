@@ -2,6 +2,23 @@
 
 Guidelines for agents and developers working in this repository.
 
+## Local Development Context (ONEVCAT Branch)
+
+This working copy is a personal branch maintained by @onevcat. Requests are
+primarily for personal workflows, not general-purpose upstream features.
+
+Local branch characteristics:
+- Upstream is `upstream/main`; personal changes live on `origin/main`.
+- Changes often prioritize local usability over broad applicability.
+- Periodically rebase onto `upstream/main` to stay current.
+
+Local adjustments in this branch (non-exhaustive):
+- Some network-dependent features are disabled.
+- Login requirements are removed for local use.
+- Auto-updater is disabled locally.
+- CJK IME edge cases are fixed in terminal input handling.
+- Refer to recent @onevcat commits for details when in doubt.
+
 ## Structure
 
 Bun + Turbo monorepo with:
@@ -415,4 +432,3 @@ The desktop app loads environment variables from the monorepo root `.env` file:
 - `override: true` is critical - ensures `.env` values override inherited environment variables
 - `src/lib/electron-router-dom.ts` must NOT import Node.js modules (`node:path`, `dotenv`) as it's shared between main and renderer processes
 - Port configuration flows: `.env` → main process → `electron-router-dom` settings → Vite dev server
-
